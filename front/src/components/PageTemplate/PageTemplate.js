@@ -1,11 +1,11 @@
 import React from 'react'
-import style from './PageTemplate.less'
+import './PageTemplate.scss'
 
 const PageTemplate = ({children}) => {
   return(
-    <div className={style.pageTemplate}>
-      <h1>To-Do List</h1>
-      <div className={style.content}>
+    <div className='pageTemplate'>
+      <h1>Ing...</h1>
+      <div className='content'>
         {children}
       </div>
     </div>

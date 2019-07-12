@@ -1,49 +1,58 @@
 import React from 'react';
-import './App.css';
-import TodoListeTemplate from './components/TodoListTemplate'
+import './styles/main.scss';
 import PageTemplate from './components/PageTemplate/PageTemplate'
+import InputWord from './components/Dict/InputWord'
+import WordList from './components/Dict/WordList'
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
+  state = {
+    input: '',
+    words: [
+      { id:0, text: '첫 번째 단어', done: true },
+      { id:1, text: '두 번째 단어', done: false },
+      { id:2, text: '3 번째 단어', done: true }
+    ]
+  }
 
-    this.state = {
-      eng: '',
-      word: '',
-      data: []
+  onChangeHandler = (e) => {
+    const { value } = e.target
+    this.setState({
+      input: value
+    })
+  }
+
+  id = this.state.words.length
+  getId = () => ++this.id
+
+  dataInsertHandler = () => {
+    const { words, input } = this.state
+    if (input) {
+      const newWords = [
+        ...words,
+        {
+          id: this.getId(),
+          text: input,
+          done: false
+        }
+      ]
+
+      this.setState({
+        words: newWords,
+        input: ''
+      })
     }
   }
-
-  ChangeEngValue = (e) => {
-    this.setState({
-      eng: e.target.value
-    })
-  }
-
-  ChangeWordValue = (e) => {
-    this.setState({
-      word: e.target.value
-    })
-  }
-
+  
   render() {
+    const { input, words } = this.state
+    const { onChangeHandler, dataInsertHandler } = this
+
     return (
       <div className="App">
-        <TodoListeTemplate>
-          템플릿 완성
-        </TodoListeTemplate>
         <PageTemplate>
-          123
+          <InputWord onChange={onChangeHandler} value={input} onInsert={dataInsertHandler} />
+          <WordList words={words} />
         </PageTemplate>
-        <header className="App-header">
-          <h1>Hello Dictionary</h1>
-        </header>
-        <body>
-          <h2>[입력 공간]</h2>
-          단어 : <input type="text" value={this.state.eng} onChange={this.ChangeEngValue} />
-          &nbsp;/ 뜻 : <input type="text" value={this.state.word} onChange={this.ChangeWordValue} />
-          <button>추가</button><button>삭제</button>
-        </body>
       </div>
     )
   }
