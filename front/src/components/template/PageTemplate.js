@@ -1,10 +1,10 @@
 import React from 'react'
 import './PageTemplate.scss'
 
-const PageTemplate = ({children}) => {
+const PageTemplate = ({children, eng, onChange}) => {
   return(
     <div className='pageTemplate'>
-      <h1>Ing...</h1>
+      <input className='english' onChange={onChange} value={eng} placeholder='영어단어 입력'/>
       <div className='content'>
         {children}
       </div>

@@ -1,17 +1,44 @@
 import React from 'react';
 import './styles/main.scss';
-import PageTemplate from './components/PageTemplate/PageTemplate'
+import PageTemplate from './components/template/PageTemplate'
 import InputWord from './components/Dict/InputWord'
 import WordList from './components/Dict/WordList'
+import Buttons from './components/Buttons'
+import axios from 'axios'
 
 class App extends React.Component {
   state = {
+    eng: '',
     input: '',
-    words: [
-      { id:0, text: '첫 번째 단어', done: true },
-      { id:1, text: '두 번째 단어', done: false },
-      { id:2, text: '3 번째 단어', done: true }
-    ]
+    words: []
+  }
+
+  onChangeEng = (e) => {
+    const { value } = e.target
+    this.setState({
+      eng: value
+    })
+  }
+
+  onResetValue = () => {
+    this.setState({
+      eng: '',
+      input: '',
+      words: []
+    })
+  }
+
+  onSubmitValue = () => {
+    axios.post('/add', {
+      english: this.state.eng,
+      word: this.state.words
+    })
+    .then(function (response) {
+      console.log(response)
+    })
+    .catch(function (error) {
+      console.log(error)
+    })
   }
 
   onChangeHandler = (e) => {
@@ -42,16 +69,59 @@ class App extends React.Component {
       })
     }
   }
-  
+
+  removeDataHandler = (id) => {
+    const { words } = this.state
+    const idx = words.findIndex(word => word.id === id)
+
+    const newWords = [
+      ...words.slice(0, idx),
+      ...words.slice(idx+1, words.length)
+    ]
+    
+    this.setState({
+      words: newWords
+    })
+  }
+
+  checkHandler = (id) => {
+    const { words } = this.state
+    const idx = words.findIndex(word => word.id === id)
+
+    const toggled = {
+      ...words[idx],
+      done: !words[idx].done
+    }
+
+    const newWords = [
+      ...words.slice(0, idx),
+      toggled,
+      ...words.slice(idx+1, words.length)
+    ]
+    
+    this.setState({
+      words: newWords
+    })
+  }
+
   render() {
-    const { input, words } = this.state
-    const { onChangeHandler, dataInsertHandler } = this
+    const { input, words, eng } = this.state
+    const { 
+      onChangeHandler,
+      onResetValue,
+      onSubmitValue,
+      dataInsertHandler, 
+      removeDataHandler, 
+      checkHandler, 
+      onChangeEng
+    } = this
 
     return (
       <div className="App">
-        <PageTemplate>
+        <PageTemplate onChange={onChangeEng} eng={eng}>
           <InputWord onChange={onChangeHandler} value={input} onInsert={dataInsertHandler} />
-          <WordList words={words} />
+          <WordList words={words} onCheck={checkHandler} onRemove={removeDataHandler} />
+          <Buttons onReset={onResetValue} onSave={onSubmitValue} />
         </PageTemplate>
       </div>
     )
