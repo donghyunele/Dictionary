@@ -6,11 +6,28 @@ import WordList from './components/Dict/WordList'
 import Buttons from './components/Buttons'
 import axios from 'axios'
 
+import * as service from './actions/posts'
+
 class App extends React.Component {
   state = {
+    list: [],
     eng: '',
     input: '',
     words: []
+  }
+
+  onCallAll = () => {
+    this.fetchWordAll()
+  }
+
+  fetchWordAll = async () => {
+    const info = await Promise.all([
+      service.getEng()
+    ])
+
+    this.setState({
+      list: info[0].data
+    })
   }
 
   onChangeEng = (e) => {
@@ -29,16 +46,17 @@ class App extends React.Component {
   }
 
   onSubmitValue = () => {
-    axios.post('/add', {
+    axios.post('http://localhost:5000/api/word/add', {
       english: this.state.eng,
       word: this.state.words
     })
     .then(function (response) {
-      console.log(response)
+      console.log('res : ' , response.data)
     })
     .catch(function (error) {
       console.log(error)
     })
+    this.onResetValue()
   }
 
   onChangeHandler = (e) => {
@@ -105,8 +123,9 @@ class App extends React.Component {
   }
 
   render() {
-    const { input, words, eng } = this.state
+    const { list, input, words, eng } = this.state
     const { 
+      onCallAll,
       onChangeHandler,
       onResetValue,
       onSubmitValue,
@@ -118,6 +137,14 @@ class App extends React.Component {
 
     return (
       <div className="App">
+        <button onClick={onCallAll}>전체요청</button>
+        <div>{list.map((item, idx) => {
+            return (
+              <div key={idx}>
+                {item}
+              </div>
+            )
+        })}</div>
         <PageTemplate onChange={onChangeEng} eng={eng}>
           <InputWord onChange={onChangeHandler} value={input} onInsert={dataInsertHandler} />
           <WordList words={words} onCheck={checkHandler} onRemove={removeDataHandler} />
