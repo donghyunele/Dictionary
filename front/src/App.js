@@ -138,13 +138,13 @@ class App extends React.Component {
     return (
       <div className="App">
         <button onClick={onCallAll}>전체요청</button>
-        <div>{list.map((item, idx) => {
-            return (
-              <div key={idx}>
-                {item}
-              </div>
-            )
-        })}</div>
+        {list.map((item, idx) => {
+          return (
+            <div key={idx}>
+              {item}
+            </div>
+          )
+        })}
         <PageTemplate onChange={onChangeEng} eng={eng}>
           <InputWord onChange={onChangeHandler} value={input} onInsert={dataInsertHandler} />
           <WordList words={words} onCheck={checkHandler} onRemove={removeDataHandler} />
