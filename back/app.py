@@ -1,13 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-from pymongo import MongoClient
-
-client = MongoClient('localhost', 27017)
-
-db = client["test"]
-collection = db["dictionary"]
-
 app = Flask(__name__)
 cors = CORS(app, resources={
   r"/v1/*": {"origin": "*"},
