@@ -25,8 +25,15 @@ class App extends React.Component {
       service.getEng()
     ])
 
+    const keys = []
+
+    info[0].data.map(item => {
+      for (var key in item) if (key !== '_id') keys.push(key)
+      return 'success'
+    })
+
     this.setState({
-      list: info[0].data
+      list: keys
     })
   }
 
@@ -138,13 +145,16 @@ class App extends React.Component {
     return (
       <div className="App">
         <button onClick={onCallAll}>전체요청</button>
-        {list.map((item, idx) => {
+        {list 
+          ? list.map((item, idx) => {
           return (
             <div key={idx}>
               {item}
             </div>
           )
-        })}
+        })
+        : ''
+        }
         <PageTemplate onChange={onChangeEng} eng={eng}>
           <InputWord onChange={onChangeHandler} value={input} onInsert={dataInsertHandler} />
           <WordList words={words} onCheck={checkHandler} onRemove={removeDataHandler} />
