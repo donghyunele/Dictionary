@@ -26,7 +26,6 @@ collection = db["dictionary"]
 # data.append({"sultry": ['무더운','관능적인','섹시한']})
 # collection.insert_many(data)
 
-# collection.delete_many()
 results = collection.find()
 
 app = Flask(__name__)
@@ -52,9 +51,10 @@ def content(id):
 @app.route('/api/word/add', methods=['POST'])
 def add_word():
   json_data = request.get_json()
-  print("넘어온 데이터 : ", json_data)
-  data = json_data['english']
-  print(data)
+  print(json_data)
+
+  collection.insert_one(json_data)
+
   return 'success'
 
 @app.route('/api/words/list')
@@ -64,6 +64,7 @@ def words_list():
   data = []
 
   for result in results:
+    print(result)
     data.append(result)
   
   return json.dumps(data, cls=Encoder)

@@ -9,11 +9,22 @@ import axios from 'axios'
 import * as service from './actions/posts'
 
 class App extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.engInput = React.createRef()
+    this.wordInput = React.createRef()
+  }
+
   state = {
     list: [],
     eng: '',
     input: '',
     words: []
+  }
+
+  componentDidMount() {
+    this.engInput.current.focus()
   }
 
   onCallAll = () => {
@@ -28,7 +39,8 @@ class App extends React.Component {
     const keys = []
 
     info[0].data.map(item => {
-      for (var key in item) if (key !== '_id') keys.push(key)
+      const word = item['english']
+      keys.push(word)
       return 'success'
     })
 
@@ -64,6 +76,7 @@ class App extends React.Component {
       console.log(error)
     })
     this.onResetValue()
+    this.wordInput.current.focus()
   }
 
   onChangeHandler = (e) => {
@@ -155,8 +168,8 @@ class App extends React.Component {
         })
         : ''
         }
-        <PageTemplate onChange={onChangeEng} eng={eng}>
-          <InputWord onChange={onChangeHandler} value={input} onInsert={dataInsertHandler} />
+        <PageTemplate engInput={this.engInput} onChange={onChangeEng} eng={eng}>
+          <InputWord wordInput={this.wordInput} onChange={onChangeHandler} value={input} onInsert={dataInsertHandler} />
           <WordList words={words} onCheck={checkHandler} onRemove={removeDataHandler} />
           <Buttons onReset={onResetValue} onSave={onSubmitValue} />
         </PageTemplate>
