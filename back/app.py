@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 from pymongo import MongoClient
 import json
+from datetime import datetime, timedelta
 from bson.objectid import ObjectId
 
 class Encoder(json.JSONEncoder):
@@ -51,7 +52,9 @@ def content(id):
 @app.route('/api/word/add', methods=['POST'])
 def add_word():
   json_data = request.get_json()
-  print(json_data)
+
+  json_data['date'] = datetime.today()
+  # print(json_data)
 
   collection.insert_one(json_data)
 

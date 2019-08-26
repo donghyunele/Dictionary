@@ -62,6 +62,7 @@ class App extends React.Component {
       input: '',
       words: []
     })
+    this.wordInput.current.focus()
   }
 
   onSubmitValue = () => {
@@ -76,7 +77,6 @@ class App extends React.Component {
       console.log(error)
     })
     this.onResetValue()
-    this.wordInput.current.focus()
   }
 
   onChangeHandler = (e) => {
