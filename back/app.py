@@ -53,8 +53,9 @@ def content(id):
 def add_word():
   json_data = request.get_json()
 
-  json_data['date'] = datetime.today()
-  # print(json_data)
+  dt = datetime.now()
+  json_data['date'] = dt.strftime("%Y-%m-%d")
+  print(json_data)
 
   collection.insert_one(json_data)
 
